@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .scrollbar-w-thin {
+    scrollbar-width: thin;
+  }
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  @apply appearance-none m-0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+input[type='range'].slider {
+  @apply appearance-none h-8 w-full bg-transparent cursor-pointer focus:outline-none;
+}
+
+input[type='range'].slider::-webkit-slider-thumb {
+  @apply appearance-none h-8 w-8 -mt-3.5 bg-white rounded-full border-solid border-4 border-gray-700 hover:border-gray-900;
+}
+
+input[type='range'].slider:focus::-webkit-slider-thumb {
+  @apply border-gray-900 ring-2;
+}
+
+input[type='range'].slider::-webkit-slider-runnable-track {
+  @apply h-1 w-full bg-gray-700 rounded-sm;
+}
+
+input[type='range'].slider:focus::-webkit-slider-runnable-track {
+  @apply bg-gray-900;
+}
+
+input[type='range'].slider::-moz-range-thumb {
+  @apply h-6 w-6 bg-white rounded-full border-solid border-4 border-gray-700 focus:border-gray-900 focus:ring hover:border-gray-900;
+}
+
+input[type='range'].slider::-moz-range-track {
+  @apply h-1 w-full bg-gray-200 rounded-sm;
+}
+
+input[type='range'].slider::-moz-range-progress {
+  @apply h-1 bg-gray-700;
+}
+
+input[type='range'].slider:focus::-moz-range-thumb {
+  @apply border-gray-900 ring-2;
+}
+
+input[type='range'].slider:focus::-moz-range-progress {
+  @apply bg-gray-900;
+}

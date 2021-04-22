@@ -22,6 +22,7 @@ const OscillatorControls = () => {
           onChange={(e) =>
             dispatchSetting({
               type: 'UPDATE_WAVEFORM',
+              // @ts-expect-error TODO
               waveform: e.target.value,
             })
           }

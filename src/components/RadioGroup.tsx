@@ -17,7 +17,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   onChange,
   children,
 }) => (
-  <div onChange={onChange} className="w-full flex flex-row rounded-sm">
+  <div onChange={onChange} className="w-min flex flex-row rounded-sm">
     <RadioContext.Provider value={{ name, selectedOption }}>
       {children}
     </RadioContext.Provider>
@@ -33,8 +33,8 @@ const RadioOption: React.FC<{ value: string }> = ({ value, children }) => {
     <label
       className={`relative text-sm select-none font-semibold cursor-pointer p-1 first:rounded-l-sm last:rounded-r-sm ${
         isSelected
-          ? 'bg-gray-700 text-white'
-          : 'bg-gray-200 hover:bg-gray-300 focus:bg-gray-300'
+          ? 'text-white bg-gray-700'
+          : 'text-gray-700 bg-gray-200 hover:bg-gray-300 focus:bg-gray-300'
       }`}
     >
       {isSelected && (

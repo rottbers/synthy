@@ -44,6 +44,7 @@ const FilterControls = () => {
           onChange={(e) =>
             dispatchSetting({
               type: 'UPDATE_FILTER',
+              // @ts-expect-error TODO
               filter: { type: e.target.value },
             })
           }

@@ -19,7 +19,7 @@ const OctaveControls = () => {
             aria-hidden="true"
             disabled={octave <= 1}
             onClick={() => dispatchSetting({ type: 'DECREMENT_OCTAVE' })}
-            className="p-2 rounded-sm bg-gray-200 hover:bg-gray-100 focus:bg-gray-100 focus:ring-2 focus:outline-none disabled:text-gray-500"
+            className="p-2 text-gray-900 rounded-sm bg-gray-200 hover:bg-gray-300 focus:ring-2 focus:outline-none disabled:text-gray-500 disabled:hover:bg-gray-200"
           >
             <Minus />
           </button>
@@ -36,13 +36,13 @@ const OctaveControls = () => {
                 octave: e.target.valueAsNumber,
               })
             }
-            className="text-center w-8 bg-white p-1 mx-2 rounded-sm focus:ring-2 focus:outline-none"
+            className="text-center w-8 bg-transparent p-1 mx-2 rounded-sm focus:ring-2 focus:outline-none"
           />
           <button
             aria-hidden="true"
             disabled={octave >= 7}
             onClick={() => dispatchSetting({ type: 'INCREMENT_OCTAVE' })}
-            className="p-2 rounded-sm bg-gray-200 hover:bg-gray-100 focus:bg-gray-100 focus:ring-2 focus:outline-none disabled:text-gray-500"
+            className="p-2 text-gray-900 rounded-sm bg-gray-200 hover:bg-gray-300 focus:ring-2 focus:outline-none disabled:text-gray-500 disabled:hover:bg-gray-200"
           >
             <Plus />
           </button>

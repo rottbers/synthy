@@ -12,7 +12,7 @@ const Keys = () => {
 
   return useMemo(
     () => (
-      <div className="w-full h-full flex flex-row">
+      <div className="w-full h-full min-h-[120px] flex flex-row">
         {Array.from({ length: totalKeys }).map((_, index) => {
           const note = calcNoteOctaveOffset(60 + index, octave);
           const notation = Frequency(note, 'midi').toNote().slice(0, -1);
@@ -71,14 +71,19 @@ const Key: React.FC<KeyProps> = ({ note, isAccidental, width, marginLeft }) => {
         onMouseDown={onKeydown}
         onMouseUp={onKeyup}
         onMouseLeave={onKeyup}
-        style={{ width: `${width}%`, marginLeft: `${marginLeft}%` }}
+        style={{
+          width: `${width}%`,
+          marginLeft: `${marginLeft}%`,
+          WebkitTapHighlightColor: 'transparent',
+          touchAction: 'none',
+        }}
         className={`${
           isAccidental
             ? `z-20 ${
-                isActive ? 'bg-green-300' : 'bg-gray-700'
+                isActive ? 'bg-yellow-200' : 'bg-gray-700'
               } h-1/2 border-4 border-t-0 border-gray-700 rounded-b-sm`
             : `z-10 ${
-                isActive ? 'bg-green-300' : 'bg-white'
+                isActive ? 'bg-yellow-200' : 'bg-white'
               } h-full border-l-2 border-r-2 first:border-l-0 last:border-r-0 border-b-4 border-gray-700`
         } select-none cursor-pointer`}
       />

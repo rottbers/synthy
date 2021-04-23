@@ -1,0 +1,27 @@
+{
+  "short_name": "Synthy",
+  "name": "Synthy",
+  "icons": [
+    {
+      "src": "/favicon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/favicon-196x196-maskable.png",
+      "type": "image/png",
+      "sizes": "196x196",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#222222",
+  "theme_color": "#ffffff"
+}

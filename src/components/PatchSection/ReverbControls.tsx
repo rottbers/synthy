@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useSettingsState, useSettingsDispatch } from '../contexts/Settings';
+import { useSettingsState, useSettingsDispatch } from '../../contexts/Settings';
 
 const FilterControls = () => {
   const { reverb } = useSettingsState();

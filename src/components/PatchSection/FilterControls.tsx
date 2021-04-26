@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import { RadioGroup, RadioOption } from './RadioGroup';
-import { useSettingsState, useSettingsDispatch } from '../contexts/Settings';
+import { useSettingsState, useSettingsDispatch } from '../../contexts/Settings';
 
-import Lowpass from '../icons/Lowpass';
-import Bandpass from '../icons/Bandpass';
-import Highpass from '../icons/Highpass';
+import Lowpass from '../../icons/Lowpass';
+import Bandpass from '../../icons/Bandpass';
+import Highpass from '../../icons/Highpass';
 
 const FilterControls = () => {
   const { filter } = useSettingsState();

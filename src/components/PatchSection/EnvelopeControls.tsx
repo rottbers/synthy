@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSettingsState, useSettingsDispatch } from '../contexts/Settings';
+import { useSettingsState, useSettingsDispatch } from '../../contexts/Settings';
 
 const EnvelopeControls = () => {
   const {

@@ -3,7 +3,17 @@ module.exports = {
   purge: ['./index.html', './src/**/*.tsx'],
   darkMode: false,
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(25%)' },
+          '100%': { transform: 'translateX(-100%)' },
+        },
+      },
+      animation: {
+        marquee: 'marquee 4s linear infinite',
+      },
+    },
   },
   variants: {
     extend: {},

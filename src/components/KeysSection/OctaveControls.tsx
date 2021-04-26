@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
-import { useSettingsState, useSettingsDispatch } from '../contexts/Settings';
+import { useSettingsState, useSettingsDispatch } from '../../contexts/Settings';
 
-import Plus from '../icons/Plus';
-import Minus from '../icons/Minus';
+import Plus from '../../icons/Plus';
+import Minus from '../../icons/Minus';
 
 const OctaveControls = () => {
   const { octave } = useSettingsState();

@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
 import { RadioGroup, RadioOption } from './RadioGroup';
-import { useSettingsState, useSettingsDispatch } from '../contexts/Settings';
+import { useSettingsState, useSettingsDispatch } from '../../contexts/Settings';
 
-import Sine from '../icons/Sine';
-import Saw from '../icons/Saw';
-import Square from '../icons/Square';
-import Triangle from '../icons/Triangle';
+import Sine from '../../icons/Sine';
+import Saw from '../../icons/Saw';
+import Square from '../../icons/Square';
+import Triangle from '../../icons/Triangle';
 
 const OscillatorControls = () => {
   const { waveform } = useSettingsState();

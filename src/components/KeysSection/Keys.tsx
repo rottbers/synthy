@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { Frequency } from 'tone';
-import { useNotesDispatch, useNotesState } from '../contexts/Notes';
-import { useSettingsState } from '../contexts/Settings';
-import { calcNoteOctaveOffset } from '../utils';
+import { useNotesDispatch, useNotesState } from '../../contexts/Notes';
+import { useSettingsState } from '../../contexts/Settings';
+import { calcNoteOctaveOffset } from '../../utils';
 
 const Keys = () => {
   const { octave } = useSettingsState();
@@ -80,10 +80,10 @@ const Key: React.FC<KeyProps> = ({ note, isAccidental, width, marginLeft }) => {
         className={`${
           isAccidental
             ? `z-20 ${
-                isActive ? 'bg-yellow-200' : 'bg-gray-700'
+                isActive ? 'bg-green-300' : 'bg-gray-700'
               } h-1/2 border-4 border-t-0 border-gray-700 rounded-b-sm`
             : `z-10 ${
-                isActive ? 'bg-yellow-200' : 'bg-white'
+                isActive ? 'bg-green-300' : 'bg-white'
               } h-full border-l-2 border-r-2 first:border-l-0 last:border-r-0 border-b-4 border-gray-700`
         } select-none cursor-pointer`}
       />

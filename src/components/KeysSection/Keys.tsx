@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Frequency } from 'tone';
 import { useNotesDispatch, useNotesState } from '../../contexts/Notes';
 import { useSettingsState } from '../../contexts/Settings';
-import { calcNoteOctaveOffset } from '../../utils';
+import { calcNoteOctaveOffset } from '../../shared/utils';
 
 const Keys = () => {
   const { octave } = useSettingsState();

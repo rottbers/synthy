@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSettingsState, useSettingsDispatch } from '../contexts/Settings';
 import { useNotesDispatch } from '../contexts/Notes';
-import { calcNoteOctaveOffset } from '../utils/';
+import { calcNoteOctaveOffset } from '../shared/utils';
 
 const keyboardNotes = {
   a: 60, // C4

@@ -19,6 +19,7 @@ const FilterControls = () => {
         </label>
         <input
           name="reverbDecay"
+          id="reverbDecay"
           type="range"
           value={reverb.decay}
           onChange={(e) =>
@@ -42,6 +43,7 @@ const FilterControls = () => {
         </label>
         <input
           name="reverbWet"
+          id="reverbWet"
           type="range"
           value={reverb.wet}
           onChange={(e) =>

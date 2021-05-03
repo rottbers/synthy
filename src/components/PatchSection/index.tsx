@@ -22,10 +22,8 @@ const PatchSection = () => {
             className={`ml-auto transition duration-200 transform ${
               showPatch ? 'rotate-90' : ''
             }`}
+            aria-label={showPatch ? 'Hide patch' : 'Show patch'}
           />
-          <span className="sr-only">
-            {showPatch ? 'Hide patch' : 'Show patch'}
-          </span>
         </button>
       </div>
       {showPatch && (

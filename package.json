@@ -10,13 +10,13 @@
   },
   "dependencies": {
     "faunadb": "^4.2.0",
+    "iso-3166-1": "^2.0.1",
     "next": "^10.2.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "tone": "^14.7.77"
   },
   "devDependencies": {
-    "@types/geoip-lite": "^1.4.1",
     "@types/react": "^17.0.4",
     "@types/react-dom": "^17.0.3",
     "@types/webmidi": "^2.0.4",

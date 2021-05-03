@@ -161,11 +161,6 @@
   resolved "https://registry.yarnpkg.com/@opentelemetry/context-base/-/context-base-0.14.0.tgz#c67fc20a4d891447ca1a855d7d70fa79a3533001"
   integrity sha512-sDOAZcYwynHFTbLo6n8kIbLiVF3a3BLkrmehJUyEbT9F+Smbi47kLGS2gG2g0fjBLR/Lr1InPD7kXL7FaTqEkw==
 
-"@types/geoip-lite@^1.4.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@types/geoip-lite/-/geoip-lite-1.4.1.tgz#2c0d787fb14b2463b244baca1f3b9023fba3c49b"
-  integrity sha512-qHH5eF3rL1wwqpzdsgMdgskfdWXxxQvJb9POJ66NK7/1l3QXsqHLpIheh9OmhtqZ2CF7AmN0sA2R4PgW8JSm7w==
-
 "@types/json-schema@^7.0.3":
   version "7.0.7"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.7.tgz#98a993516c859eb0d5c4c8f098317a9ea68db9ad"
@@ -1877,6 +1872,11 @@ isexe@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=
+
+iso-3166-1@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/iso-3166-1/-/iso-3166-1-2.0.1.tgz#2cb69b88a8c8a15a6478e597a0af8f0f003481c7"
+  integrity sha512-R2I/7ahckn6e9fJ1hqRmCnDPI+ZMbf76vWSpUKzGZ5wyQNlJ7FsEHXubGaGec+uDz94ikftByPW/MbVe7gyIbg==
 
 jest-worker@27.0.0-next.5:
   version "27.0.0-next.5"

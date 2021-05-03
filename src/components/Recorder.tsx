@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { Transport } from 'tone';
 import { useNotesDispatch, useNotesEffect } from '../contexts/Notes';
 import { useSettingsState } from '../contexts/Settings';
@@ -220,27 +220,33 @@ const Recorder = () => {
 
   return (
     <>
-      <div className="flex flex-row text-3xl text-gray-900">
+      <div className="flex flex-row text-2xl text-gray-900 -mr-1">
         {isIdle && (
-          <button onClick={startRecording} className="p-1 rounded-full">
+          <button
+            onClick={startRecording}
+            className="p-2 rounded-full hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+          >
             <Record aria-label="Start recording" />
           </button>
         )}
 
         {isRecording && (
-          <button onClick={stopRecording} className="relative p-1 rounded-full">
+          <button
+            onClick={stopRecording}
+            className="p-2 rounded-full hover:bg-gray-100 focus:bg-gray-100 focus:outline-none relative "
+          >
             <Record
               className="motion-safe:animate-pulse"
               aria-label="Stop recording"
             />
-            <div className="p-0.5 rounded-full bg-gray-900 absolute -bottom-1 left-1/2 transform -translate-x-1/2" />
+            <div className="p-0.5 rounded-full bg-gray-900 absolute bottom-0 left-1/2 transform -translate-x-1/2" />
           </button>
         )}
 
         {(isRecorded || isPlayback || isShareSuccess || isShareError) && (
           <button
             onClick={shareRecording}
-            className="p-1 rounded-full mr-4 disabled:text-gray-600 disabled:cursor-default"
+            className="mr-2 p-2 rounded-full hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:text-gray-600 disabled:cursor-default"
             disabled={isPlayback || isShareSuccess || isShareError}
           >
             <Share aria-label="Share recording" />
@@ -248,8 +254,25 @@ const Recorder = () => {
         )}
 
         {isShareLoading && (
-          <div className="flex justify-center items-center">
-            <p>...</p>
+          <div className="mr-2 p-2 flex items-center">
+            <svg
+              className="animate-spin text-gray-900"
+              viewBox="0 0 32 32"
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              width="1em"
+            >
+              <circle
+                className="stroke-current"
+                fill="transparent"
+                strokeWidth="4"
+                strokeDasharray="88"
+                strokeDashoffset="22"
+                cx="16"
+                cy="16"
+                r="14"
+              />
+            </svg>
           </div>
         )}
 
@@ -260,7 +283,7 @@ const Recorder = () => {
           isShareError) && (
           <button
             onClick={() => dispatch({ type: 'SCRAP_RECORDING' })}
-            className="p-1 rounded-full mr-4 disabled:text-gray-600 disabled:cursor-default"
+            className="mr-2 p-2 rounded-full hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:text-gray-600 disabled:cursor-default"
             disabled={isPlayback || isShareLoading}
           >
             <Cross aria-label="Scrap recording" />
@@ -270,17 +293,20 @@ const Recorder = () => {
         {(isRecorded || isShareLoading || isShareSuccess || isShareError) && (
           <button
             onClick={startPlayback}
-            className="p-1 rounded-full disabled:text-gray-600 disabled:cursor-default"
+            className="p-2 rounded-full hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:text-gray-600 disabled:cursor-default"
             disabled={isShareLoading}
           >
-            <Play aria-label="Play recording" />
+            <Play
+              aria-label="Play recording"
+              className="transform translate-x-[10%]"
+            />
           </button>
         )}
 
         {isPlayback && (
           <button
             onClick={stopPlayback}
-            className="p-1 rounded-full"
+            className="p-2 rounded-full hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
             disabled={true}
           >
             <Stop aria-label="Stop playing recording" />
@@ -290,7 +316,7 @@ const Recorder = () => {
 
       {isShareSuccess && state.recordingId && (
         <ShareDialog
-          url={`https://synthy.netlify.app/${state.recordingId}`}
+          url={window.location.href + state.recordingId}
           onClose={() => dispatch({ type: 'CLOSE_SHARE' })}
         />
       )}
@@ -314,7 +340,8 @@ interface ShareDialogProps {
 }
 
 const ShareDialog = ({ url, error, onClose }: ShareDialogProps) => {
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const [copied, setCopied] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (buttonRef.current !== null) buttonRef.current.focus();
@@ -335,6 +362,8 @@ const ShareDialog = ({ url, error, onClose }: ShareDialogProps) => {
   async function copy() {
     if (!url || !navigator.clipboard) return;
     await navigator.clipboard.writeText(url);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
   }
 
   return (
@@ -345,23 +374,21 @@ const ShareDialog = ({ url, error, onClose }: ShareDialogProps) => {
     >
       <div className="w-full sm:w-auto sm:min-w-[24rem] sm:px-8 p-4 rounded-sm shadow bg-white">
         <div className="flex flex-row justify-between items-center mb-4 text-gray-900">
-          <h2 id="dialog-title" className="font-bold text-xl ">
+          <h2 id="dialog-title" className="font-bold text-xl">
             Share
           </h2>
           <button
             ref={error ? buttonRef : null}
-            className="p-4 rounded-full hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+            className="p-2 rounded-full hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
             onClick={onClose}
           >
             <Cross aria-label="Close" />
           </button>
         </div>
 
-        {error && (
-          <p className="text-gray-600 mb-6">Something went wrong sharing...</p>
-        )}
-
-        {!error && (
+        {error ? (
+          <p className="text-gray-600 mb-6">{error}</p>
+        ) : (
           <>
             <p className="text-gray-900 bg-gray-100 mb-6 rounded-sm p-2 overflow-x-hidden">
               {url}
@@ -370,9 +397,9 @@ const ShareDialog = ({ url, error, onClose }: ShareDialogProps) => {
               <button
                 ref={buttonRef}
                 onClick={copy}
-                className="font-semibold bg-gray-900 text-white py-2 px-8 rounded-sm self-center hover:bg-gray-700 active:bg-gray-700 focus:outline-none"
+                className="min-w-[8rem] font-semibold bg-gray-900 text-white py-2 px-8 rounded-sm self-center hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-700 focus:outline-none"
               >
-                Copy
+                {copied ? 'Copied' : 'Copy'}
               </button>
             </div>
           </>

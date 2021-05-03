@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Head from 'next/head';
 
 import Recoder from '../components/Recorder';
 import PatchSection from '../components/PatchSection';
@@ -11,6 +12,9 @@ import Synth from '../components/Synth';
 const IndexPage = () => {
   return (
     <>
+      <Head>
+        <title>Synthy</title>
+      </Head>
       <main className="min-h-screen grid grid-cols-1 grid-rows-[min-content,min-content,auto]">
         <div className="py-2 px-4 sm:px-8 flex justify-between items-center">
           <div className="font-black text-3xl text-gray-900">

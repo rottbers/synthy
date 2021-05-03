@@ -28,5 +28,5 @@ export interface RecordingShareBody {
 
 export interface Recording extends RecordingShareBody {
   date: string;
-  city: string | null;
+  country: string;
 }

@@ -23,6 +23,7 @@ const FilterControls = () => {
         </label>
         <input
           name="filterFrequency"
+          id="filterFrequency"
           type="range"
           value={filter.frequency}
           onChange={(e) =>
@@ -37,31 +38,30 @@ const FilterControls = () => {
           className="slider"
         />
 
-        <p className="text-gray-700 mb-1 mt-2">Type</p>
-        <RadioGroup
-          name="filterType"
-          selectedOption={filter.type}
-          onChange={(e) =>
-            dispatchSetting({
-              type: 'UPDATE_FILTER',
-              // @ts-expect-error TODO
-              filter: { type: e.target.value },
-            })
-          }
-        >
-          <RadioOption value="lowpass">
-            <Lowpass className="text-4xl m-1" />
-            <span className="sr-only">Lowpass</span>
-          </RadioOption>
-          <RadioOption value="bandpass">
-            <Bandpass className="text-4xl m-1" />
-            <span className="sr-only">Bandpass</span>
-          </RadioOption>
-          <RadioOption value="highpass">
-            <Highpass className="text-4xl m-1" />
-            <span className="sr-only">Highpass</span>
-          </RadioOption>
-        </RadioGroup>
+        <fieldset>
+          <legend className="text-gray-700 mb-1 mt-2">Type</legend>
+          <RadioGroup
+            name="filterType"
+            selectedOption={filter.type}
+            onChange={(e) =>
+              dispatchSetting({
+                type: 'UPDATE_FILTER',
+                // @ts-expect-error TODO
+                filter: { type: e.target.value },
+              })
+            }
+          >
+            <RadioOption value="lowpass">
+              <Lowpass className="text-4xl m-1" aria-label="Lowpass" />
+            </RadioOption>
+            <RadioOption value="bandpass">
+              <Bandpass className="text-4xl m-1" aria-label="Bandpass" />
+            </RadioOption>
+            <RadioOption value="highpass">
+              <Highpass className="text-4xl m-1" aria-label="Highpass" />
+            </RadioOption>
+          </RadioGroup>
+        </fieldset>
       </div>
     ),
     [filter, dispatchSetting]

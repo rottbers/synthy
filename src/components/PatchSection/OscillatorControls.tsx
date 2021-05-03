@@ -15,35 +15,33 @@ const OscillatorControls = () => {
     () => (
       <div className="my-4 px-4 sm:px-8 border-r-2 border-gray-200 w-full">
         <h3 className="text-gray-900 font-semibold text-lg mb-4">Oscillator</h3>
-        <p className="text-gray-700 mb-1">Waveform</p>
-        <RadioGroup
-          name="waveform"
-          selectedOption={waveform}
-          onChange={(e) =>
-            dispatchSetting({
-              type: 'UPDATE_WAVEFORM',
-              // @ts-expect-error TODO
-              waveform: e.target.value,
-            })
-          }
-        >
-          <RadioOption value="sine">
-            <Sine className="text-4xl m-1" />
-            <span className="sr-only">Sine</span>
-          </RadioOption>
-          <RadioOption value="sawtooth">
-            <Saw className="text-4xl m-1" />
-            <span className="sr-only">Saw</span>
-          </RadioOption>
-          <RadioOption value="square">
-            <Square className="text-4xl m-1" />
-            <span className="sr-only">Square</span>
-          </RadioOption>
-          <RadioOption value="triangle">
-            <Triangle className="text-4xl m-1" />
-            <span className="sr-only">Triangle</span>
-          </RadioOption>
-        </RadioGroup>
+        <fieldset>
+          <legend className="text-gray-700 mb-1">Waveform</legend>
+          <RadioGroup
+            name="waveform"
+            selectedOption={waveform}
+            onChange={(e) =>
+              dispatchSetting({
+                type: 'UPDATE_WAVEFORM',
+                // @ts-expect-error TODO
+                waveform: e.target.value,
+              })
+            }
+          >
+            <RadioOption value="sine">
+              <Sine className="text-4xl m-1" aria-label="Sine" />
+            </RadioOption>
+            <RadioOption value="sawtooth">
+              <Saw className="text-4xl m-1" aria-label="Saw" />
+            </RadioOption>
+            <RadioOption value="square">
+              <Square className="text-4xl m-1" aria-label="Square" />
+            </RadioOption>
+            <RadioOption value="triangle">
+              <Triangle className="text-4xl m-1" aria-label="Triangle" />
+            </RadioOption>
+          </RadioGroup>
+        </fieldset>
       </div>
     ),
     [waveform, dispatchSetting]

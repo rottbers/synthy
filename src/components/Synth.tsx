@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
-import { PolySynth, Filter, Reverb, Destination, Frequency } from 'tone';
+import { PolySynth, Filter, Reverb, Destination } from 'tone';
 import { useSettingsState } from '../contexts/Settings';
 import { useNotesEffect } from '../contexts/Notes';
+import { midiNoteToCharNote } from '../shared/utils';
 
 const Synth = () => {
   const { reverb, filter, envelope, waveform } = useSettingsState();
@@ -37,17 +38,21 @@ const Synth = () => {
   useEffect(() => {
     if (!noteEffect || !synthRef.current) return;
 
-    const note = Frequency(noteEffect.note, 'midi').toNote();
-
     switch (noteEffect.type) {
-      case 'TRIGGER_ATTACK': {
+      case 'NOTE_ON': {
+        const note = midiNoteToCharNote(noteEffect.note);
         const velocity = Number((noteEffect.velocity / 127).toFixed(2));
         synthRef.current.triggerAttack(note, '+0.025', velocity);
         break;
       }
-      case 'TRIGGER_RELEASE': {
+      case 'NOTE_OFF': {
+        const note = midiNoteToCharNote(noteEffect.note);
         synthRef.current.triggerRelease(note, '+0.025');
         break;
+      }
+      case 'NOTES_OFF': {
+        const notes = noteEffect.notes.map((note) => midiNoteToCharNote(note));
+        synthRef.current.triggerRelease(notes, '+0.025');
       }
     }
   }, [noteEffect]);

@@ -1,8 +1,7 @@
-import React, { useMemo } from 'react';
-import { Frequency } from 'tone';
+import { useMemo } from 'react';
 import { useNotesDispatch, useNotesState } from '../../contexts/Notes';
 import { useSettingsState } from '../../contexts/Settings';
-import { calcNoteOctaveOffset } from '../../shared/utils';
+import { calcNoteOctaveOffset, midiNoteToCharNote } from '../../shared/utils';
 
 const Keys = () => {
   const { octave } = useSettingsState();
@@ -15,7 +14,7 @@ const Keys = () => {
       <div className="w-full h-full min-h-[120px] flex flex-row">
         {Array.from({ length: totalKeys }).map((_, index) => {
           const note = calcNoteOctaveOffset(60 + index, octave);
-          const notation = Frequency(note, 'midi').toNote().slice(0, -1);
+          const notation = midiNoteToCharNote(note).slice(0, -1);
           const isAccidental = notation.includes('#');
           const isNeutralNextToNeutral = notation === 'C' || notation === 'F';
 

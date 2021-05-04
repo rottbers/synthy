@@ -15,8 +15,8 @@ export interface Settings {
 }
 
 export type Note =
-  | { type: 'TRIGGER_ATTACK'; note: number; velocity: number; time: number }
-  | { type: 'TRIGGER_RELEASE'; note: number; time: number };
+  | { type: 'NOTE_ON'; note: number; velocity: number; time: number }
+  | { type: 'NOTE_OFF'; note: number; time: number };
 
 export type Notes = Note[];
 

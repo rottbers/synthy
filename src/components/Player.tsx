@@ -121,7 +121,7 @@ const Player = ({ recordingId }: { recordingId: string | undefined }) => {
     Transport.stop();
     Transport.cancel();
     dispatch({ type: 'STOP' });
-    // TODO: dispatch release of all active notes
+    dispatchNote({ type: 'NOTES_OFF' });
   }
 
   async function play() {
@@ -132,18 +132,10 @@ const Player = ({ recordingId }: { recordingId: string | undefined }) => {
     const startTime = Transport.immediate();
     dispatch({ type: 'PLAY', startTime });
 
-    recording.notes.forEach((event) => {
+    recording.notes.forEach(({ time, ...event }) => {
       Transport.schedule(() => {
-        switch (event.type) {
-          case 'TRIGGER_ATTACK': {
-            dispatchNote({ type: 'NOTE_ON', note: event.note, velocity: event.velocity }); // prettier-ignore
-            break;
-          }
-          case 'TRIGGER_RELEASE': {
-            dispatchNote({ type: 'NOTE_OFF', note: event.note });
-          }
-        }
-      }, event.time);
+        dispatchNote({ ...event });
+      }, time);
     });
 
     Transport.scheduleRepeat((currentTime) => {
@@ -158,7 +150,7 @@ const Player = ({ recordingId }: { recordingId: string | undefined }) => {
   }
 
   const date = recording?.date ? new Date(recording?.date).toLocaleDateString() : ''; // prettier-ignore
-  const country = recording?.country ? recording.country : 'Sweden';
+  const country = recording?.country;
 
   return (
     <section className="flex flex-col items-center justify-center px-4 pt-4 pb-6">

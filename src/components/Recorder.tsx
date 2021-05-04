@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import { Transport } from 'tone';
 import { useNotesDispatch, useNotesEffect } from '../contexts/Notes';
 import { useSettingsState } from '../contexts/Settings';
@@ -140,7 +140,7 @@ const Recorder = () => {
   const isShareError = state.status === 'share-error';
 
   useEffect(() => {
-    if (!isRecording || !noteEffect) return;
+    if (!isRecording || !noteEffect || noteEffect.type === 'NOTES_OFF') return;
 
     const time = Transport.immediate() - state.startTime;
     dispatch({ type: 'ADD_NOTE', note: { ...noteEffect, time } });
@@ -156,37 +156,29 @@ const Recorder = () => {
     dispatch({ type: 'STOP_RECORDING', duration });
   }
 
+  function stopPlayback() {
+    Transport.stop();
+    Transport.cancel();
+    dispatch({ type: 'STOP_PLAYBACK' });
+    dispatchNote({ type: 'NOTES_OFF' });
+  }
+
   function startPlayback() {
     dispatch({ type: 'START_PLAYBACK' });
     Transport.stop();
     Transport.cancel();
 
-    state.notes.forEach((event) => {
+    state.notes.forEach(({ time, ...event }) => {
       Transport.schedule(() => {
-        switch (event.type) {
-          case 'TRIGGER_ATTACK': {
-            dispatchNote({ type: 'NOTE_ON', note: event.note, velocity: event.velocity }); // prettier-ignore
-            break;
-          }
-          case 'TRIGGER_RELEASE': {
-            dispatchNote({ type: 'NOTE_OFF', note: event.note });
-          }
-        }
-      }, event.time);
+        dispatchNote({ ...event });
+      }, time);
     });
 
     Transport.schedule(() => {
-      dispatch({ type: 'STOP_PLAYBACK' });
+      stopPlayback();
     }, state.duration);
 
     Transport.start();
-  }
-
-  function stopPlayback() {
-    Transport.stop();
-    Transport.cancel();
-    dispatch({ type: 'STOP_PLAYBACK' });
-    // TODO: dispatch release of all active notes
   }
 
   async function shareRecording() {
@@ -307,7 +299,6 @@ const Recorder = () => {
           <button
             onClick={stopPlayback}
             className="p-2 rounded-full hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
-            disabled={true}
           >
             <Stop aria-label="Stop playing recording" />
           </button>

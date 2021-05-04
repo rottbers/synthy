@@ -1,35 +1,46 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import { createContext, useContext, useReducer } from 'react';
 
 interface NotesState {
   [key: string]: 'on' | 'off';
 }
 
 type NotesEffect =
-  | { type: 'TRIGGER_ATTACK'; note: number; velocity: number }
-  | { type: 'TRIGGER_RELEASE'; note: number };
+  | { type: 'NOTE_ON'; note: number; velocity: number }
+  | { type: 'NOTE_OFF'; note: number }
+  | { type: 'NOTES_OFF'; notes: number[] };
 
 type State = [NotesState, NotesEffect?];
 
 type Event =
   | { type: 'NOTE_ON'; note: number; velocity: number }
-  | { type: 'NOTE_OFF'; note: number };
+  | { type: 'NOTE_OFF'; note: number }
+  | { type: 'NOTES_OFF' };
 
 function reducer([state]: State, event: Event): State {
-  if (!state[event.note]) return [state];
-
-  switch (state[event.note]) {
-    case 'off': {
-      if (event.type === 'NOTE_ON') {
-        const notesState = { ...state, [event.note]: 'on' };
-        const notesEffect: NotesEffect = { type: 'TRIGGER_ATTACK', note: event.note, velocity: event.velocity }; // prettier-ignore
+  switch (event.type) {
+    case 'NOTE_ON': {
+      if (state[event.note] && state[event.note] === 'off') {
+        const notesState: NotesState = { ...state, [event.note]: 'on' };
+        const notesEffect: NotesEffect = event;
         return [notesState, notesEffect];
       }
       return [state];
     }
-    case 'on': {
-      if (event.type === 'NOTE_OFF') {
-        const notesState = { ...state, [event.note]: 'off' };
-        const notesEffect: NotesEffect = { type: 'TRIGGER_RELEASE', note: event.note }; // prettier-ignore
+    case 'NOTE_OFF': {
+      if (state[event.note] && state[event.note] === 'on') {
+        const notesState: NotesState = { ...state, [event.note]: 'off' };
+        const notesEffect: NotesEffect = event;
+        return [notesState, notesEffect];
+      }
+      return [state];
+    }
+    case 'NOTES_OFF': {
+      const notes = Object.entries(state).reduce((acc: number[], [note, status]) => (status === 'on' ? [...acc, Number(note)] : acc), []); // prettier-ignore
+
+      if (notes.length) {
+        const notesState: NotesState = { ...state };
+        notes.forEach((note) => (notesState[note] = 'off'));
+        const notesEffect: NotesEffect = { type: event.type, notes };
         return [notesState, notesEffect];
       }
       return [state];

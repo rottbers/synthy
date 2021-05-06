@@ -10,6 +10,8 @@ import Keyboard from '../components/Keyboard';
 import MIDI from '../components/MIDI';
 import Synth from '../components/Synth';
 
+import Logo from '../icons/Logo';
+
 const ListenPage = () => {
   const { query } = useRouter();
 
@@ -39,8 +41,8 @@ const ListenPage = () => {
               </Link>
             </div>
             <Link href="/">
-              <a className="font-semibold text-gray-900 focus:text-gray-700 hover:text-gray-700">
-                Play yourself
+              <a className="-mr-1 p-2 rounded-full text-2xl text-gray-900 focus:bg-gray-100 hover:bg-gray-100">
+                <Logo className="text-2xl" aria-label="play yourself" />
               </a>
             </Link>
           </div>

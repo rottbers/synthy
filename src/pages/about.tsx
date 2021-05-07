@@ -21,7 +21,7 @@ const AboutPage = () => {
         <title>About | Synthy</title>
       </Head>
       <main className="h-screen p-4 mx-auto max-w-lg flex flex-col md:justify-center text-gray-600">
-        <h1 className="font-black text-gray-900 italic text-4xl md:text-5xl text-center mt-4 md:mt-0 mb-2">
+        <h1 className="font-black text-gray-900 italic text-4xl md:text-5xl text-center mt-4 md:mt-0 mb-4">
           Synthy
         </h1>
         <p className="mb-2 md:text-xl text-center">

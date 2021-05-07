@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
-import { useSettingsState, useSettingsDispatch } from '../contexts/Settings';
+import { start } from 'tone';
 import { useNotesDispatch } from '../contexts/Notes';
+import { useAppDispatch, useAppState } from '../contexts/App';
 import { calcNoteOctaveOffset } from '../shared/utils';
 
 const keyboardNotes = {
@@ -29,13 +30,18 @@ const keyboardControls = {
 };
 
 const Keyboard = () => {
-  const { octave, velocity } = useSettingsState();
-  const dispatchApp = useSettingsDispatch();
+  const { octave, velocity, audioStarted } = useAppState();
+  const dispatchApp = useAppDispatch();
   const dispatchNote = useNotesDispatch();
 
   useEffect(() => {
-    function onKeydown(e: KeyboardEvent) {
+    async function onKeydown(e: KeyboardEvent) {
       if (e.repeat || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+      if (!audioStarted) {
+        await start();
+        dispatchApp({ type: 'AUDIO_STARTED' });
+      }
 
       const key = e.key.toLowerCase();
 
@@ -73,7 +79,7 @@ const Keyboard = () => {
       document.removeEventListener('keydown', onKeydown);
       document.removeEventListener('keyup', onKeyup);
     };
-  }, [octave, velocity, dispatchApp, dispatchNote]);
+  }, [octave, velocity, audioStarted, dispatchApp, dispatchNote]);
 
   return null;
 };

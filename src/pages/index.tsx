@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Head from 'next/head';
 
 import Recoder from '../components/Recorder';
-import PatchSection from '../components/PatchSection';
+import SettingsSection from '../components/SettingsSection';
 import KeysSection from '../components/KeysSection';
 
 import Keyboard from '../components/Keyboard';
@@ -29,7 +29,7 @@ const IndexPage = () => {
           <Recoder />
         </div>
 
-        <PatchSection />
+        <SettingsSection />
         <KeysSection />
       </main>
 

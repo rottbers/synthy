@@ -1,7 +1,8 @@
 import { useEffect, useReducer, useRef, useState } from 'react';
-import { Transport } from 'tone';
-import { useNotesDispatch, useNotesEffect } from '../contexts/Notes';
+import { start, Transport } from 'tone';
+import { useNotesDispatch, useNotesEvent } from '../contexts/Notes';
 import { useSettingsState } from '../contexts/Settings';
+import { useAppState, useAppDispatch } from '../contexts/App';
 
 import Record from '../icons/Record';
 import Play from '../icons/Play';
@@ -19,7 +20,7 @@ interface State {
   recordingId: string | null;
 }
 
-type Event =
+type Action =
   | { type: 'SCRAP_RECORDING' | 'START_PLAYBACK' | 'STOP_PLAYBACK' | 'SHARE_LOADING' | 'SHARE_ERROR' | 'SHOW_SHARE' | 'CLOSE_SHARE'; } // prettier-ignore
   | { type: 'SHARE_SUCCESS'; recordingId: string }
   | { type: 'START_RECORDING'; startTime: number }
@@ -34,12 +35,12 @@ const initialState: State = {
   recordingId: null,
 };
 
-function reducer(state: State, event: Event): State {
+function reducer(state: State, action: Action): State {
   switch (state.status) {
     case 'idle': {
-      switch (event.type) {
+      switch (action.type) {
         case 'START_RECORDING': {
-          const startTime = event.startTime;
+          const startTime = action.startTime;
           return { ...state, startTime, notes: [], status: 'recording' };
         }
         default:
@@ -47,15 +48,15 @@ function reducer(state: State, event: Event): State {
       }
     }
     case 'recording': {
-      switch (event.type) {
+      switch (action.type) {
         case 'STOP_RECORDING': {
-          const duration = event.duration;
+          const duration = action.duration;
           return state.notes.length
             ? { ...state, duration, status: 'recorded' }
             : { ...state, status: 'idle' };
         }
         case 'ADD_NOTE': {
-          const notes = [...state.notes, event.note];
+          const notes = [...state.notes, action.note];
           return { ...state, notes };
         }
         default:
@@ -63,7 +64,7 @@ function reducer(state: State, event: Event): State {
       }
     }
     case 'recorded': {
-      switch (event.type) {
+      switch (action.type) {
         case 'SCRAP_RECORDING': {
           return { ...initialState };
         }
@@ -83,7 +84,7 @@ function reducer(state: State, event: Event): State {
       }
     }
     case 'playback': {
-      switch (event.type) {
+      switch (action.type) {
         case 'STOP_PLAYBACK': {
           return { ...state, status: 'recorded' };
         }
@@ -92,9 +93,9 @@ function reducer(state: State, event: Event): State {
       }
     }
     case 'share-loading': {
-      switch (event.type) {
+      switch (action.type) {
         case 'SHARE_SUCCESS': {
-          const recordingId = event.recordingId;
+          const recordingId = action.recordingId;
           return { ...state, recordingId, status: 'share-success' };
         }
         case 'SHARE_ERROR': {
@@ -105,7 +106,7 @@ function reducer(state: State, event: Event): State {
       }
     }
     case 'share-success': {
-      switch (event.type) {
+      switch (action.type) {
         case 'CLOSE_SHARE': {
           return { ...state, status: 'recorded' };
         }
@@ -114,7 +115,7 @@ function reducer(state: State, event: Event): State {
       }
     }
     case 'share-error': {
-      switch (event.type) {
+      switch (action.type) {
         case 'CLOSE_SHARE': {
           return { ...state, status: 'recorded' };
         }
@@ -126,8 +127,10 @@ function reducer(state: State, event: Event): State {
 }
 
 const Recorder = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const noteEffect = useNotesEffect();
+  const [state, dispatchRecorder] = useReducer(reducer, initialState);
+  const { audioStarted } = useAppState();
+  const dispatchApp = useAppDispatch();
+  const noteEvent = useNotesEvent();
   const dispatchNote = useNotesDispatch();
   const settings = useSettingsState();
 
@@ -140,31 +143,35 @@ const Recorder = () => {
   const isShareError = state.status === 'share-error';
 
   useEffect(() => {
-    if (!isRecording || !noteEffect || noteEffect.type === 'NOTES_OFF') return;
+    if (!isRecording || !noteEvent || noteEvent.type === 'NOTES_OFF') return;
 
     const time = Transport.immediate() - state.startTime;
-    dispatch({ type: 'ADD_NOTE', note: { ...noteEffect, time } });
-  }, [noteEffect, isRecording, state.startTime]);
+    dispatchRecorder({ type: 'ADD_NOTE', note: { ...noteEvent, time } });
+  }, [noteEvent, isRecording, state.startTime]);
 
-  function startRecording() {
+  async function startRecording() {
+    if (!audioStarted) {
+      await start();
+      dispatchApp({ type: 'AUDIO_STARTED' });
+    }
     const startTime = Transport.immediate();
-    dispatch({ type: 'START_RECORDING', startTime });
+    dispatchRecorder({ type: 'START_RECORDING', startTime });
   }
 
   function stopRecording() {
     const duration = Transport.immediate() - state.startTime;
-    dispatch({ type: 'STOP_RECORDING', duration });
+    dispatchRecorder({ type: 'STOP_RECORDING', duration });
   }
 
   function stopPlayback() {
     Transport.stop();
     Transport.cancel();
-    dispatch({ type: 'STOP_PLAYBACK' });
+    dispatchRecorder({ type: 'STOP_PLAYBACK' });
     dispatchNote({ type: 'NOTES_OFF' });
   }
 
   function startPlayback() {
-    dispatch({ type: 'START_PLAYBACK' });
+    dispatchRecorder({ type: 'START_PLAYBACK' });
     Transport.stop();
     Transport.cancel();
 
@@ -183,11 +190,11 @@ const Recorder = () => {
 
   async function shareRecording() {
     if (state.recordingId) {
-      dispatch({ type: 'SHOW_SHARE' });
+      dispatchRecorder({ type: 'SHOW_SHARE' });
       return;
     }
 
-    dispatch({ type: 'SHARE_LOADING' });
+    dispatchRecorder({ type: 'SHARE_LOADING' });
 
     const data: RecordingShareBody = {
       notes: state.notes,
@@ -204,9 +211,9 @@ const Recorder = () => {
 
       const { recordingId } = await response.json();
 
-      dispatch({ type: 'SHARE_SUCCESS', recordingId });
+      dispatchRecorder({ type: 'SHARE_SUCCESS', recordingId });
     } catch {
-      dispatch({ type: 'SHARE_ERROR' });
+      dispatchRecorder({ type: 'SHARE_ERROR' });
     }
   }
 
@@ -274,7 +281,7 @@ const Recorder = () => {
           isShareSuccess ||
           isShareError) && (
           <button
-            onClick={() => dispatch({ type: 'SCRAP_RECORDING' })}
+            onClick={() => dispatchRecorder({ type: 'SCRAP_RECORDING' })}
             className="mr-2 p-2 rounded-full hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:text-gray-600 disabled:cursor-default"
             disabled={isPlayback || isShareLoading}
           >
@@ -308,14 +315,14 @@ const Recorder = () => {
       {isShareSuccess && state.recordingId && (
         <ShareDialog
           url={window.location.href + state.recordingId}
-          onClose={() => dispatch({ type: 'CLOSE_SHARE' })}
+          onClose={() => dispatchRecorder({ type: 'CLOSE_SHARE' })}
         />
       )}
 
       {isShareError && (
         <ShareDialog
           error="Something went wrong"
-          onClose={() => dispatch({ type: 'CLOSE_SHARE' })}
+          onClose={() => dispatchRecorder({ type: 'CLOSE_SHARE' })}
         />
       )}
     </>

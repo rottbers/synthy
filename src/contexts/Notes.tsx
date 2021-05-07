@@ -4,33 +4,33 @@ interface NotesState {
   [key: string]: 'on' | 'off';
 }
 
-type NotesEffect =
+type NotesEvent =
   | { type: 'NOTE_ON'; note: number; velocity: number }
   | { type: 'NOTE_OFF'; note: number }
   | { type: 'NOTES_OFF'; notes: number[] };
 
-type State = [NotesState, NotesEffect?];
+type State = [NotesState, NotesEvent?];
 
-type Event =
+type Action =
   | { type: 'NOTE_ON'; note: number; velocity: number }
   | { type: 'NOTE_OFF'; note: number }
   | { type: 'NOTES_OFF' };
 
-function reducer([state]: State, event: Event): State {
-  switch (event.type) {
+function reducer([state]: State, action: Action): State {
+  switch (action.type) {
     case 'NOTE_ON': {
-      if (state[event.note] && state[event.note] === 'off') {
-        const notesState: NotesState = { ...state, [event.note]: 'on' };
-        const notesEffect: NotesEffect = event;
-        return [notesState, notesEffect];
+      if (state[action.note] && state[action.note] === 'off') {
+        const notesState: NotesState = { ...state, [action.note]: 'on' };
+        const notesEvent: NotesEvent = action;
+        return [notesState, notesEvent];
       }
       return [state];
     }
     case 'NOTE_OFF': {
-      if (state[event.note] && state[event.note] === 'on') {
-        const notesState: NotesState = { ...state, [event.note]: 'off' };
-        const notesEffect: NotesEffect = event;
-        return [notesState, notesEffect];
+      if (state[action.note] && state[action.note] === 'on') {
+        const notesState: NotesState = { ...state, [action.note]: 'off' };
+        const notesEvent: NotesEvent = action;
+        return [notesState, notesEvent];
       }
       return [state];
     }
@@ -40,8 +40,8 @@ function reducer([state]: State, event: Event): State {
       if (notes.length) {
         const notesState: NotesState = { ...state };
         notes.forEach((note) => (notesState[note] = 'off'));
-        const notesEffect: NotesEffect = { type: event.type, notes };
-        return [notesState, notesEffect];
+        const notesEvent: NotesEvent = { type: action.type, notes };
+        return [notesState, notesEvent];
       }
       return [state];
     }
@@ -52,23 +52,23 @@ function reducer([state]: State, event: Event): State {
 const initialState: NotesState = {};
 for (let i = 24; i <= 110; i++) initialState[i] = 'off';
 
-const NotesStateContext = createContext<State>([initialState]);
-const NotesDispatchContext = createContext<React.Dispatch<Event>>(() => null);
+const StateContext = createContext<State>([initialState]);
+const DispatchContext = createContext<React.Dispatch<Action>>(() => null);
 
 const NotesProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, [initialState]);
 
   return (
-    <NotesStateContext.Provider value={state}>
-      <NotesDispatchContext.Provider value={dispatch}>
+    <StateContext.Provider value={state}>
+      <DispatchContext.Provider value={dispatch}>
         {children}
-      </NotesDispatchContext.Provider>
-    </NotesStateContext.Provider>
+      </DispatchContext.Provider>
+    </StateContext.Provider>
   );
 };
 
-const useNotesState = () => useContext(NotesStateContext)[0];
-const useNotesEffect = () => useContext(NotesStateContext)[1];
-const useNotesDispatch = () => useContext(NotesDispatchContext);
+const useNotesState = () => useContext(StateContext)[0];
+const useNotesEvent = () => useContext(StateContext)[1];
+const useNotesDispatch = () => useContext(DispatchContext);
 
-export { NotesProvider, useNotesState, useNotesEffect, useNotesDispatch };
+export { NotesProvider, useNotesState, useNotesEvent, useNotesDispatch };

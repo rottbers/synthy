@@ -2,6 +2,7 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { NotesProvider } from '../contexts/Notes';
 import { SettingsProvider } from '../contexts/Settings';
+import { AppProvider } from '../contexts/App';
 import '../tailwind.css';
 
 const App = ({ Component, pageProps }: AppProps) => (
@@ -15,11 +16,13 @@ const App = ({ Component, pageProps }: AppProps) => (
       <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       <link rel="manifest" href="/manifest.webmanifest" />
     </Head>
-    <SettingsProvider>
-      <NotesProvider>
-        <Component {...pageProps} />
-      </NotesProvider>
-    </SettingsProvider>
+    <AppProvider>
+      <SettingsProvider>
+        <NotesProvider>
+          <Component {...pageProps} />
+        </NotesProvider>
+      </SettingsProvider>
+    </AppProvider>
   </>
 );
 

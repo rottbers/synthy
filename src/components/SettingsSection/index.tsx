@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useAppState, useAppDispatch } from '../../contexts/App';
 
 import OscillatorControls from './OscillatorControls';
 import EnvelopeControls from './EnvelopeControls';
@@ -7,8 +7,9 @@ import ReverbControls from './ReverbControls';
 
 import Arrow from '../../icons/Arrow';
 
-const PatchSection = () => {
-  const [showPatch, setShowPatch] = useState(false);
+const SettingsSection = () => {
+  const { showSettings } = useAppState();
+  const dispatchApp = useAppDispatch();
 
   return (
     <section>
@@ -16,17 +17,17 @@ const PatchSection = () => {
         <h2 className="text-xl font-bold">Patch</h2>
         <button
           className="w-full focus:outline-none p-2 group"
-          onClick={() => setShowPatch((currentValue) => !currentValue)}
+          onClick={() => dispatchApp({ type: 'TOGGLE_SHOW_SETTINGS' })}
         >
           <Arrow
             className={`ml-auto transition duration-200 transform ${
-              showPatch ? 'rotate-90' : ''
+              showSettings ? 'rotate-90' : ''
             }`}
-            aria-label={showPatch ? 'Hide patch' : 'Show patch'}
+            aria-label={showSettings ? 'Hide patch' : 'Show patch'}
           />
         </button>
       </div>
-      {showPatch && (
+      {showSettings && (
         <div className="flex flex-col md:flex-row w-full overflow-x-auto overflow-y-hidden scrollbar-w-thin">
           <OscillatorControls />
           <EnvelopeControls />
@@ -38,4 +39,4 @@ const PatchSection = () => {
   );
 };
 
-export default PatchSection;
+export default SettingsSection;

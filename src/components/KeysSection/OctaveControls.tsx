@@ -1,12 +1,12 @@
-import React, { useMemo } from 'react';
-import { useSettingsState, useSettingsDispatch } from '../../contexts/Settings';
+import { useMemo } from 'react';
+import { useAppState, useAppDispatch } from '../../contexts/App';
 
 import Plus from '../../icons/Plus';
 import Minus from '../../icons/Minus';
 
 const OctaveControls = () => {
-  const { octave } = useSettingsState();
-  const dispatchSetting = useSettingsDispatch();
+  const { octave } = useAppState();
+  const dispatchApp = useAppDispatch();
 
   return useMemo(
     () => (
@@ -18,7 +18,7 @@ const OctaveControls = () => {
           <button
             aria-hidden="true"
             disabled={octave <= 1}
-            onClick={() => dispatchSetting({ type: 'DECREMENT_OCTAVE' })}
+            onClick={() => dispatchApp({ type: 'DECREMENT_OCTAVE' })}
             className="p-2 text-gray-900 rounded-sm bg-gray-200 hover:bg-gray-300 focus:ring-2 focus:outline-none disabled:text-gray-500 disabled:hover:bg-gray-200"
           >
             <Minus />
@@ -31,7 +31,7 @@ const OctaveControls = () => {
             max={7}
             value={octave}
             onChange={(e) =>
-              dispatchSetting({
+              dispatchApp({
                 type: 'UPDATE_OCTAVE',
                 octave: e.target.valueAsNumber,
               })
@@ -41,7 +41,7 @@ const OctaveControls = () => {
           <button
             aria-hidden="true"
             disabled={octave >= 7}
-            onClick={() => dispatchSetting({ type: 'INCREMENT_OCTAVE' })}
+            onClick={() => dispatchApp({ type: 'INCREMENT_OCTAVE' })}
             className="p-2 text-gray-900 rounded-sm bg-gray-200 hover:bg-gray-300 focus:ring-2 focus:outline-none disabled:text-gray-500 disabled:hover:bg-gray-200"
           >
             <Plus />
@@ -49,7 +49,7 @@ const OctaveControls = () => {
         </div>
       </div>
     ),
-    [octave, dispatchSetting]
+    [octave, dispatchApp]
   );
 };
 

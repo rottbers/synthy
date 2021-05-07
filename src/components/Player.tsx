@@ -2,6 +2,7 @@ import { useEffect, useReducer } from 'react';
 import { Transport, start } from 'tone';
 import { useNotesDispatch } from '../contexts/Notes';
 import { useSettingsDispatch } from '../contexts/Settings';
+import { useAppDispatch, useAppState } from '../contexts/App';
 
 import Play from '../icons/Play';
 import Stop from '../icons/Stop';
@@ -15,18 +16,18 @@ interface State {
   startTime: number;
 }
 
-type Event =
+type Action =
   | { type: 'ERROR' | 'STOP' }
   | { type: 'SUCCESS'; recording: Recording }
   | { type: 'PLAY'; startTime: number }
   | { type: 'UPDATE_ELAPSED'; currentTime: number };
 
-function reducer(state: State, event: Event): State {
+function reducer(state: State, action: Action): State {
   switch (state.status) {
     case 'loading': {
-      switch (event.type) {
+      switch (action.type) {
         case 'SUCCESS': {
-          const recording = event.recording;
+          const recording = action.recording;
           return { ...state, recording, status: 'success' };
         }
         case 'ERROR': {
@@ -37,9 +38,9 @@ function reducer(state: State, event: Event): State {
       }
     }
     case 'success': {
-      switch (event.type) {
+      switch (action.type) {
         case 'PLAY': {
-          const startTime = event.startTime;
+          const startTime = action.startTime;
           return { ...state, startTime, status: 'playing' };
         }
         default:
@@ -47,14 +48,14 @@ function reducer(state: State, event: Event): State {
       }
     }
     case 'playing': {
-      switch (event.type) {
+      switch (action.type) {
         case 'STOP': {
           return { ...state, elapsed: 0, status: 'success' };
         }
         case 'UPDATE_ELAPSED': {
           if (!state.recording) return { ...state };
 
-          const current = event.currentTime - state.startTime;
+          const current = action.currentTime - state.startTime;
           const duration = state.recording.duration;
           const percent = (current / duration) * 100;
           const elapsed = percent > 100 ? 100 : percent;
@@ -65,7 +66,7 @@ function reducer(state: State, event: Event): State {
       }
     }
     case 'error': {
-      switch (event.type) {
+      switch (action.type) {
         default:
           return state;
       }
@@ -81,11 +82,13 @@ const initialState: State = {
 };
 
 const Player = ({ recordingId }: { recordingId: string | undefined }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatchPlayer] = useReducer(reducer, initialState);
+  const { audioStarted } = useAppState();
+  const dispatchApp = useAppDispatch();
   const dispatchNote = useNotesDispatch();
   const dispatchSetting = useSettingsDispatch();
 
-  const { recording, status } = state;
+  const { recording, status, elapsed } = state;
 
   const isLoading = status === 'loading';
   const isSuccess = status === 'success';
@@ -108,9 +111,9 @@ const Player = ({ recordingId }: { recordingId: string | undefined }) => {
         dispatchSetting({ type: 'UPDATE_FILTER', filter });
         dispatchSetting({ type: 'UPDATE_REVERB', reverb });
 
-        dispatch({ type: 'SUCCESS', recording: data });
-      } catch (error) {
-        dispatch({ type: 'ERROR' });
+        dispatchPlayer({ type: 'SUCCESS', recording: data });
+      } catch {
+        dispatchPlayer({ type: 'ERROR' });
       }
     }
 
@@ -120,17 +123,20 @@ const Player = ({ recordingId }: { recordingId: string | undefined }) => {
   function stop() {
     Transport.stop();
     Transport.cancel();
-    dispatch({ type: 'STOP' });
+    dispatchPlayer({ type: 'STOP' });
     dispatchNote({ type: 'NOTES_OFF' });
   }
 
   async function play() {
     if (!recording || !isSuccess) return;
 
-    await start();
+    if (!audioStarted) {
+      await start();
+      dispatchApp({ type: 'AUDIO_STARTED' });
+    }
 
     const startTime = Transport.immediate();
-    dispatch({ type: 'PLAY', startTime });
+    dispatchPlayer({ type: 'PLAY', startTime });
 
     recording.notes.forEach(({ time, ...event }) => {
       Transport.schedule(() => {
@@ -139,7 +145,7 @@ const Player = ({ recordingId }: { recordingId: string | undefined }) => {
     });
 
     Transport.scheduleRepeat((currentTime) => {
-      dispatch({ type: 'UPDATE_ELAPSED', currentTime });
+      dispatchPlayer({ type: 'UPDATE_ELAPSED', currentTime });
     }, 0.1);
 
     Transport.schedule(() => {
@@ -184,7 +190,7 @@ const Player = ({ recordingId }: { recordingId: string | undefined }) => {
                 r="14"
                 strokeWidth="2"
                 strokeDasharray="88 88"
-                strokeDashoffset={88 - (state.elapsed / 100) * 88}
+                strokeDashoffset={88 - (elapsed / 100) * 88}
                 fill="transparent"
                 className="stroke-current text-gray-600 transition-all ease-linear"
               />

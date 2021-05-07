@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
+import { start } from 'tone';
+import { useAppDispatch, useAppState } from '../../contexts/App';
 import { useNotesDispatch, useNotesState } from '../../contexts/Notes';
-import { useSettingsState } from '../../contexts/Settings';
 import { calcNoteOctaveOffset, midiNoteToCharNote } from '../../shared/utils';
 
 const Keys = () => {
-  const { octave } = useSettingsState();
+  const { octave } = useAppState();
 
   const totalKeys = 15;
   const neutralKeys = 9;
@@ -47,16 +48,22 @@ interface KeyProps {
 }
 
 const Key: React.FC<KeyProps> = ({ note, isAccidental, width, marginLeft }) => {
+  const { audioStarted } = useAppState();
+  const dispatchApp = useAppDispatch();
   const { [note]: noteState } = useNotesState();
-  const notesDispatch = useNotesDispatch();
+  const dispatchNote = useNotesDispatch();
 
   return useMemo(() => {
-    function onKeydown() {
-      notesDispatch({ type: 'NOTE_ON', note, velocity: 100 });
+    async function onKeydown() {
+      if (!audioStarted) {
+        await start();
+        dispatchApp({ type: 'AUDIO_STARTED' });
+      }
+      dispatchNote({ type: 'NOTE_ON', note, velocity: 100 });
     }
 
     function onKeyup() {
-      notesDispatch({ type: 'NOTE_OFF', note });
+      dispatchNote({ type: 'NOTE_OFF', note });
     }
 
     const isActive = noteState === 'on';
@@ -87,5 +94,14 @@ const Key: React.FC<KeyProps> = ({ note, isAccidental, width, marginLeft }) => {
         } select-none cursor-pointer`}
       />
     );
-  }, [note, isAccidental, width, marginLeft, noteState, notesDispatch]);
+  }, [
+    note,
+    isAccidental,
+    width,
+    marginLeft,
+    audioStarted,
+    noteState,
+    dispatchApp,
+    dispatchNote,
+  ]);
 };

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { RadioGroup, RadioOption } from './RadioGroup';
 import { useSettingsState, useSettingsDispatch } from '../../contexts/Settings';
 

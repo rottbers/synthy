@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Head from 'next/head';
 
 import Player from '../components/Player';
-import PatchSection from '../components/PatchSection';
+import SettingsSection from '../components/SettingsSection';
 import KeysSection from '../components/KeysSection';
 
 import Keyboard from '../components/Keyboard';
@@ -49,7 +49,7 @@ const ListenPage = () => {
           <Player recordingId={recordingId} />
         </div>
 
-        <PatchSection />
+        <SettingsSection />
         <KeysSection />
       </main>
 

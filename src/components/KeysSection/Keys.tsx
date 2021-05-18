@@ -86,10 +86,10 @@ const Key: React.FC<KeyProps> = ({ note, isAccidental, width, marginLeft }) => {
         className={`${
           isAccidental
             ? `z-20 ${
-                isActive ? 'bg-green-300' : 'bg-gray-700'
+                isActive ? 'bg-amber-200' : 'bg-gray-700'
               } h-1/2 border-4 border-t-0 border-gray-700 rounded-b-sm`
             : `z-10 ${
-                isActive ? 'bg-green-300' : 'bg-white'
+                isActive ? 'bg-amber-200' : 'bg-white'
               } h-full border-l-2 border-r-2 first:border-l-0 last:border-r-0 border-b-4 border-gray-700`
         } select-none cursor-pointer`}
       />

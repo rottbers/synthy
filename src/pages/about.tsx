@@ -28,13 +28,16 @@ const AboutPage = () => {
           A web-based polysynth built on{' '}
           <a
             href="https://tonejs.github.io/"
-            className="underline hover:text-gray-900 focus:text-gray-900"
+            className="underline rounded-sm hover:text-gray-900 focus:outline-none focus-visible:ring ring-offset-3 ring-blue-400"
           >
             Tone.js
           </a>
           .
         </p>
-        <div className="mx-auto md:mb-2 overflow-x-hidden w-[30px]">
+        <div
+          className="mx-auto md:mb-2 overflow-x-hidden w-[30px]"
+          tabIndex={-1}
+        >
           <div className="w-[120px] text-3xl flex flex-row motion-safe:animate-marquee">
             <Sine aria-hidden="true" />
             <Saw aria-hidden="true" />
@@ -65,12 +68,12 @@ const AboutPage = () => {
             className="inline-block text-gray-900 transform translate-x-[10%]"
             aria-label="Play recording icon"
           />{' '}
-          ) the notes back or scrap the recording ({' '}
+          ) the notes back or scrap ({' '}
           <Cross
             className="inline-block text-gray-900"
             aria-label="Scrap recording icon"
           />{' '}
-          ).
+          ) the recording.
         </p>
         <h2 className="font-bold text-gray-900 md:text-xl md:mb-1">Share</h2>
         <p className="mb-6 md:text-xl">
@@ -82,7 +85,7 @@ const AboutPage = () => {
           ) the recording along with its patch via URL.
         </p>
         <Link href={recordingId ? `/${recordingId}` : '/'}>
-          <a className="mt-6 font-semibold bg-gray-900 text-white py-2 px-8 rounded-sm self-center hover:bg-gray-700 focus:bg-gray-700">
+          <a className="mt-6 font-semibold bg-gray-900 text-white py-2 px-8 rounded-sm self-center hover:bg-gray-700 focus:outline-none focus-visible:ring ring-blue-400">
             Got it, go back.
           </a>
         </Link>

@@ -32,7 +32,7 @@ const FilterControls = () => {
               filter: { frequency: e.target.valueAsNumber },
             })
           }
-          step={1}
+          step={5}
           min={0}
           max={20000}
           className="slider"
@@ -52,13 +52,13 @@ const FilterControls = () => {
             }
           >
             <RadioOption value="lowpass">
-              <Lowpass className="text-4xl m-1" aria-label="Lowpass" />
+              <Lowpass className="text-3xl m-1" aria-label="Lowpass" />
             </RadioOption>
             <RadioOption value="bandpass">
-              <Bandpass className="text-4xl m-1" aria-label="Bandpass" />
+              <Bandpass className="text-3xl m-1" aria-label="Bandpass" />
             </RadioOption>
             <RadioOption value="highpass">
-              <Highpass className="text-4xl m-1" aria-label="Highpass" />
+              <Highpass className="text-3xl m-1" aria-label="Highpass" />
             </RadioOption>
           </RadioGroup>
         </fieldset>

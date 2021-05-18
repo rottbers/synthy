@@ -27,21 +27,21 @@ const ListenPage = () => {
       </Head>
       <main className="min-h-screen grid grid-cols-1 grid-rows-[min-content,min-content,auto]">
         <div className="flex flex-col">
-          <div className="py-2 px-4 sm:px-8 flex justify-between items-center">
-            <div className="font-black text-gray-900 text-3xl text-center">
+          <div className="px-4 sm:px-8 flex justify-between items-center">
+            <div className="font-black text-2xl text-gray-900">
               <h1 className="inline-block italic">Synthy</h1>
               <Link
                 href={{ pathname: '/about', query: { recordingId } }}
                 as="/about"
               >
-                <a className="inline-block underline ml-2 focus:text-gray-700 hover:text-gray-700">
+                <a className="inline-block ml-2.5 sm:ml-[1.25rem] p-3 w-12 h-12 text-center leading-none bg-gray-200 hover:bg-gray-300 focus:outline-none focus-visible:ring ring-inset ring-blue-400">
                   <span className="sr-only">about</span>
                   <span aria-hidden="true">?</span>
                 </a>
               </Link>
             </div>
             <Link href="/">
-              <a className="-mr-1 p-2 rounded-full text-2xl text-gray-900 focus:bg-gray-100 hover:bg-gray-100">
+              <a className="-mr-1.5 p-3 bg-amber-200 hover:bg-amber-200 focus-visible:ring focus-visible:ring-inset ring-blue-400 focus:outline-none">
                 <Logo className="text-2xl" aria-label="play yourself" />
               </a>
             </Link>

@@ -20,7 +20,7 @@ const IndexPage = () => {
           <div className="font-black text-2xl text-gray-900">
             <h1 className="inline-block italic">Synthy</h1>
             <Link href="/about">
-              <a className="inline-block ml-2.5 sm:ml-[1.25rem] p-3 w-12 h-12 text-center leading-none bg-gray-200 hover:bg-gray-300 focus:outline-none focus-visible:ring ring-inset ring-blue-400">
+              <a className="inline-block ml-2.5 sm:ml-[1.25rem] p-3 w-12 h-12 text-center leading-none bg-gray-200 hover:bg-gray-300 focus:outline-none focus-visible:ring ring-inset ring-blue-500">
                 <span className="sr-only">about</span>
                 <span aria-hidden="true">?</span>
               </a>

@@ -223,7 +223,7 @@ const Recorder = () => {
         {(isRecorded || isPlayback || isShareSuccess || isShareError) && (
           <button
             onClick={shareRecording}
-            className="p-3 bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-inset ring-blue-400 focus:outline-none disabled:text-gray-600 disabled:hover:bg-gray-200 disabled:cursor-default"
+            className="p-3 bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-inset ring-blue-500 focus:outline-none disabled:text-gray-600 disabled:hover:bg-gray-200 disabled:cursor-default"
             disabled={isPlayback || isShareSuccess || isShareError}
           >
             <Share aria-label="Share recording" />
@@ -256,7 +256,7 @@ const Recorder = () => {
         {!isIdle && !isRecording && (
           <button
             onClick={() => dispatchRecorder({ type: 'SCRAP_RECORDING' })}
-            className="p-3 bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-inset ring-blue-400 focus:outline-none disabled:text-gray-600 disabled:hover:bg-gray-200 disabled:cursor-default"
+            className="p-3 bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-inset ring-blue-500 focus:outline-none disabled:text-gray-600 disabled:hover:bg-gray-200 disabled:cursor-default"
             disabled={isPlayback || isShareLoading}
           >
             <Cross aria-label="Scrap recording" />
@@ -270,7 +270,7 @@ const Recorder = () => {
             if (isRecorded) startPlayback();
             if (isPlayback) stopPlayback();
           }}
-          className="relative p-3 bg-amber-200 hover:bg-amber-200 focus-visible:ring ring-inset ring-blue-400 focus:outline-none disabled:text-gray-600 disabled:hover:bg-gray-200 disabled:cursor-default"
+          className="relative p-3 bg-amber-200 hover:bg-amber-200 focus-visible:ring ring-inset ring-blue-500 focus:outline-none disabled:text-gray-600 disabled:hover:bg-gray-200 disabled:cursor-default"
           disabled={isShareLoading}
         >
           {isIdle && <Record aria-label="Start recording" />}
@@ -363,7 +363,7 @@ const ShareDialog = ({ url, error, onClose }: ShareDialogProps) => {
           </h2>
           <button
             ref={buttonRef}
-            className="p-2 rounded-full hover:bg-gray-200 focus:outline-none focus-visible:ring ring-blue-400"
+            className="p-2 rounded-full hover:bg-gray-200 focus:outline-none focus-visible:ring ring-blue-500"
             onClick={onClose}
           >
             <Cross aria-label="Close" />
@@ -384,7 +384,7 @@ const ShareDialog = ({ url, error, onClose }: ShareDialogProps) => {
             <div className="flex flex-row justify-end">
               <button
                 onClick={copy}
-                className="min-w-[8rem] py-2 px-8 font-semibold bg-gray-900 text-white rounded-sm self-center hover:bg-gray-700 focus:outline-none focus-visible:ring ring-blue-400"
+                className="min-w-[8rem] py-2 px-8 font-semibold bg-gray-900 text-white rounded-sm self-center hover:bg-gray-700 focus:outline-none focus-visible:ring ring-blue-500"
               >
                 {copied ? 'Copied' : 'Copy'}
               </button>

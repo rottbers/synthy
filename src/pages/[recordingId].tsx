@@ -34,14 +34,14 @@ const ListenPage = () => {
                 href={{ pathname: '/about', query: { recordingId } }}
                 as="/about"
               >
-                <a className="inline-block ml-2.5 sm:ml-[1.25rem] p-3 w-12 h-12 text-center leading-none bg-gray-200 hover:bg-gray-300 focus:outline-none focus-visible:ring ring-inset ring-blue-400">
+                <a className="inline-block ml-2.5 sm:ml-[1.25rem] p-3 w-12 h-12 text-center leading-none bg-gray-200 hover:bg-gray-300 focus:outline-none focus-visible:ring ring-inset ring-blue-500">
                   <span className="sr-only">about</span>
                   <span aria-hidden="true">?</span>
                 </a>
               </Link>
             </div>
             <Link href="/">
-              <a className="-mr-1.5 p-3 bg-amber-200 hover:bg-amber-200 focus-visible:ring focus-visible:ring-inset ring-blue-400 focus:outline-none">
+              <a className="-mr-1.5 p-3 bg-amber-200 hover:bg-amber-200 focus-visible:ring focus-visible:ring-inset ring-blue-500 focus:outline-none">
                 <Logo className="text-2xl" aria-label="play yourself" />
               </a>
             </Link>

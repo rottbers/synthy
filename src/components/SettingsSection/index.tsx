@@ -19,7 +19,7 @@ const SettingsSection = () => {
           className="w-full focus:outline-none group"
           onClick={() => dispatchApp({ type: 'TOGGLE_SHOW_SETTINGS' })}
         >
-          <div className="ml-auto w-min p-2 rounded-full group-focus-visible:ring ring-blue-400">
+          <div className="ml-auto w-min p-2 rounded-full group-focus-visible:ring ring-blue-500">
             <Arrow
               className={` transition duration-200 transform ${
                 showSettings ? 'rotate-90' : ''

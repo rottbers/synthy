@@ -28,7 +28,7 @@ const AboutPage = () => {
           A web-based polysynth built on{' '}
           <a
             href="https://tonejs.github.io/"
-            className="underline rounded-sm hover:text-gray-900 focus:outline-none focus-visible:ring ring-offset-3 ring-blue-400"
+            className="underline rounded-sm hover:text-gray-900 focus:outline-none focus-visible:ring ring-offset-3 ring-blue-500"
           >
             Tone.js
           </a>
@@ -85,7 +85,7 @@ const AboutPage = () => {
           ) the recording along with its patch via URL.
         </p>
         <Link href={recordingId ? `/${recordingId}` : '/'}>
-          <a className="mt-6 font-semibold bg-gray-900 text-white py-2 px-8 rounded-sm self-center hover:bg-gray-700 focus:outline-none focus-visible:ring ring-blue-400">
+          <a className="mt-6 font-semibold bg-gray-900 text-white py-2 px-8 rounded-sm self-center hover:bg-gray-700 focus:outline-none focus-visible:ring ring-blue-500">
             Got it, go back.
           </a>
         </Link>

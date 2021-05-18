@@ -231,7 +231,7 @@ const Recorder = () => {
         )}
 
         {isShareLoading && (
-          <div className="p-3 flex items-center">
+          <div className="p-3 bg-gray-200 flex items-center">
             <svg
               className="animate-spin text-gray-900"
               viewBox="0 0 32 32"
@@ -285,10 +285,7 @@ const Recorder = () => {
             </>
           )}
 
-          {(isRecorded ||
-            isShareLoading ||
-            isShareSuccess ||
-            isShareSuccess) && (
+          {(isRecorded || isShareLoading || isShareSuccess || isShareError) && (
             <Play
               aria-label="Play recording"
               className="transform translate-x-[5%]"
@@ -326,11 +323,13 @@ interface ShareDialogProps {
 
 const ShareDialog = ({ url, error, onClose }: ShareDialogProps) => {
   const [copied, setCopied] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    if (buttonRef.current !== null) buttonRef.current.focus();
-  }, []);
+    if (inputRef.current !== null && url) inputRef.current.select();
+    if (buttonRef.current !== null && error) buttonRef.current.focus();
+  }, [url, error]);
 
   useEffect(() => {
     function close(e: KeyboardEvent) {
@@ -363,8 +362,8 @@ const ShareDialog = ({ url, error, onClose }: ShareDialogProps) => {
             Share
           </h2>
           <button
-            ref={error ? buttonRef : null}
-            className="p-4 hover:bg-gray-200 focus-visible:bg-gray-900 focus-visible:text-white focus:outline-none"
+            ref={buttonRef}
+            className="p-2 rounded-full hover:bg-gray-200 focus:outline-none focus-visible:ring ring-blue-400"
             onClick={onClose}
           >
             <Cross aria-label="Close" />
@@ -375,14 +374,17 @@ const ShareDialog = ({ url, error, onClose }: ShareDialogProps) => {
           <p className="text-gray-600 mb-6">{error}</p>
         ) : (
           <>
-            <p className="text-gray-900 bg-gray-100 mb-6 rounded-sm p-2 overflow-x-hidden">
-              {url}
-            </p>
+            <input
+              type="text"
+              value={url}
+              readOnly
+              ref={inputRef}
+              className="w-full text-gray-900 bg-gray-100 mb-6 rounded-sm p-2 overflow-x-hidden focus:outline-none"
+            />
             <div className="flex flex-row justify-end">
               <button
-                ref={buttonRef}
                 onClick={copy}
-                className="min-w-[8rem] font-semibold bg-gray-900 text-white py-2 px-8 rounded-sm self-center hover:bg-gray-700 focus-visible:bg-gray-700 active:bg-gray-700 focus:outline-none"
+                className="min-w-[8rem] py-2 px-8 font-semibold bg-gray-900 text-white rounded-sm self-center hover:bg-gray-700 focus:outline-none focus-visible:ring ring-blue-400"
               >
                 {copied ? 'Copied' : 'Copy'}
               </button>

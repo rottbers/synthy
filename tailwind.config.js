@@ -1,8 +1,16 @@
+const colors = require('tailwindcss/colors');
+
 module.exports = {
   mode: 'jit',
   purge: ['./index.html', './src/**/*.tsx'],
   darkMode: false,
   theme: {
+    colors: {
+      transparent: 'transparent',
+      current: 'currentColor',
+      ...colors,
+      gray: colors.coolGray,
+    },
     extend: {
       keyframes: {
         marquee: {

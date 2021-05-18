@@ -163,7 +163,7 @@ const Player = ({ recordingId }: { recordingId: string | undefined }) => {
       <h2 className="sr-only">Listen</h2>
       <button
         disabled={isLoading || isError}
-        className={`p-8 rounded-full border-4 border-gray-900 focus:outline-none disabled:cursor-default disabled:text-gray-500 disabled:border-gray-500 relative ${
+        className={`p-8 rounded-full border-4 border-gray-900 focus:outline-none focus-visible:ring ring-blue-500 disabled:cursor-default disabled:text-gray-500 disabled:border-gray-500 relative ${
           isLoading ? 'animate-pulse' : ''
         }`}
         onClick={isPlaying ? stop : play}

@@ -16,7 +16,7 @@ const EnvelopeControls = () => {
               className="flex justify-between text-gray-700 mb-1"
             >
               <span>Attack </span>
-              <span className="text-right">{attack}s</span>
+              <span className="text-right">{attack * 1000}ms</span>
             </label>
             <input
               name="attack"
@@ -29,7 +29,7 @@ const EnvelopeControls = () => {
                   envelope: { attack: e.target.valueAsNumber },
                 })
               }
-              step={0.01}
+              step={attack >= 0.1 ? 0.01 : 0.001}
               min={0}
               max={1}
               className="slider"
@@ -40,7 +40,7 @@ const EnvelopeControls = () => {
               className="flex justify-between text-gray-700 mb-1 mt-2"
             >
               <span>Decay </span>
-              <span className="text-right">{decay}s</span>
+              <span className="text-right">{decay * 1000}ms</span>
             </label>
             <input
               name="decay"
@@ -53,8 +53,8 @@ const EnvelopeControls = () => {
                   envelope: { decay: e.target.valueAsNumber },
                 })
               }
-              step={0.01}
-              min={0.01}
+              step={0.001}
+              min={0.001}
               max={1}
               className="slider"
             />
@@ -90,7 +90,7 @@ const EnvelopeControls = () => {
               className="flex justify-between text-gray-700 mb-1 mt-2"
             >
               <span>Release </span>
-              <span className="text-right">{release}s</span>
+              <span className="text-right">{release * 1000}ms</span>
             </label>
             <input
               name="release"
@@ -103,7 +103,7 @@ const EnvelopeControls = () => {
                   envelope: { release: e.target.valueAsNumber },
                 })
               }
-              step={0.01}
+              step={release >= 0.1 ? 0.01 : 0.001}
               min={0}
               max={1}
               className="slider"

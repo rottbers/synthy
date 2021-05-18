@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  ::selection {
+    @apply bg-amber-200 text-gray-900;
+  }
+}
+
 @layer utilities {
   .scrollbar-w-thin {
     scrollbar-width: thin;
@@ -22,23 +28,23 @@ input[type='range'].slider {
 }
 
 input[type='range'].slider::-webkit-slider-thumb {
-  @apply appearance-none h-8 w-8 -mt-3.5 bg-white rounded-full border-solid border-4 border-gray-700 hover:border-gray-900;
+  @apply appearance-none h-8 w-8 -mt-3.5 bg-white rounded-full border-solid border-4 border-gray-700 hover:border-gray-900 active:bg-gray-900;
 }
 
-input[type='range'].slider:focus::-webkit-slider-thumb {
-  @apply border-gray-900 ring-2;
+input[type='range'].slider:focus-visible::-webkit-slider-thumb {
+  @apply ring ring-blue-500;
 }
 
 input[type='range'].slider::-webkit-slider-runnable-track {
   @apply h-1 w-full bg-gray-700 rounded-sm;
 }
 
-input[type='range'].slider:focus::-webkit-slider-runnable-track {
-  @apply bg-gray-900;
+input[type='range'].slider::-moz-range-thumb {
+  @apply h-6 w-6 bg-white rounded-full border-solid border-4 border-gray-700 hover:border-gray-900 active:bg-gray-900;
 }
 
-input[type='range'].slider::-moz-range-thumb {
-  @apply h-6 w-6 bg-white rounded-full border-solid border-4 border-gray-700 focus:border-gray-900 focus:ring hover:border-gray-900;
+input[type='range'].slider:focus-visible::-moz-range-thumb {
+  @apply ring ring-blue-500;
 }
 
 input[type='range'].slider::-moz-range-track {
@@ -49,10 +55,10 @@ input[type='range'].slider::-moz-range-progress {
   @apply h-1 bg-gray-700;
 }
 
-input[type='range'].slider:focus::-moz-range-thumb {
-  @apply border-gray-900 ring-2;
+input[type='range'].slider:focus-visible::-moz-range-progress {
+  @apply bg-gray-900;
 }
 
-input[type='range'].slider:focus::-moz-range-progress {
-  @apply bg-gray-900;
+input[type='radio'].radio:focus-visible + label {
+  @apply ring ring-inset ring-blue-500;
 }

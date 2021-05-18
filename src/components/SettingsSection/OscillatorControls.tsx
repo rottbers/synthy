@@ -29,16 +29,16 @@ const OscillatorControls = () => {
             }
           >
             <RadioOption value="sine">
-              <Sine className="text-4xl m-1" aria-label="Sine" />
+              <Sine className="text-3xl m-1" aria-label="Sine" />
             </RadioOption>
             <RadioOption value="sawtooth">
-              <Saw className="text-4xl m-1" aria-label="Saw" />
+              <Saw className="text-3xl m-1" aria-label="Saw" />
             </RadioOption>
             <RadioOption value="square">
-              <Square className="text-4xl m-1" aria-label="Square" />
+              <Square className="text-3xl m-1" aria-label="Square" />
             </RadioOption>
             <RadioOption value="triangle">
-              <Triangle className="text-4xl m-1" aria-label="Triangle" />
+              <Triangle className="text-3xl m-1" aria-label="Triangle" />
             </RadioOption>
           </RadioGroup>
         </fieldset>

@@ -28,27 +28,33 @@ const RadioOption: React.FC<{ value: string }> = ({ value, children }) => {
   const { name, selectedOption } = useContext(RadioContext);
 
   const isSelected = value === selectedOption;
+  const id = `${name}-${value}`;
 
   return (
-    <label
-      className={`relative text-sm select-none font-semibold cursor-pointer p-1 first:rounded-l-sm last:rounded-r-sm ${
-        isSelected
-          ? 'text-white bg-gray-700'
-          : 'text-gray-700 bg-gray-200 hover:bg-gray-300 focus:bg-gray-300'
-      }`}
-    >
-      {isSelected && (
-        <div className="p-px rounded-full bg-white absolute bottom-1 left-1/2 transform -translate-x-1/2" />
-      )}
+    <>
       <input
         type="radio"
         name={name}
+        id={id}
         value={value}
         defaultChecked={isSelected}
-        className="sr-only"
+        className="sr-only radio"
       />
-      {children}
-    </label>
+      <label
+        htmlFor={id}
+        className={`relative p-1 select-none cursor-pointer first:rounded-l-sm last:rounded-r-sm ${
+          isSelected
+            ? 'text-white bg-gray-700 hover:cursor-default'
+            : 'text-gray-700 bg-gray-200 hover:bg-gray-300'
+        }`}
+      >
+        {isSelected && (
+          <div className="p-0.5 bg-white rounded-full absolute bottom-1 left-1/2 transform -translate-x-1/2" />
+        )}
+
+        {children}
+      </label>
+    </>
   );
 };
 

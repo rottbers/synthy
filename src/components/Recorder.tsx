@@ -219,33 +219,11 @@ const Recorder = () => {
 
   return (
     <>
-      <div className="flex flex-row text-2xl text-gray-900 -mr-1">
-        {isIdle && (
-          <button
-            onClick={startRecording}
-            className="p-2 rounded-full hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
-          >
-            <Record aria-label="Start recording" />
-          </button>
-        )}
-
-        {isRecording && (
-          <button
-            onClick={stopRecording}
-            className="p-2 rounded-full hover:bg-gray-100 focus:bg-gray-100 focus:outline-none relative "
-          >
-            <Record
-              className="motion-safe:animate-pulse"
-              aria-label="Stop recording"
-            />
-            <div className="p-0.5 rounded-full bg-gray-900 absolute bottom-0 left-1/2 transform -translate-x-1/2" />
-          </button>
-        )}
-
+      <div className="flex flex-row text-2xl text-gray-900 -mr-1.5">
         {(isRecorded || isPlayback || isShareSuccess || isShareError) && (
           <button
             onClick={shareRecording}
-            className="mr-2 p-2 rounded-full hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:text-gray-600 disabled:cursor-default"
+            className="p-3 bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-inset ring-blue-500 focus:outline-none disabled:text-gray-600 disabled:hover:bg-gray-200 disabled:cursor-default"
             disabled={isPlayback || isShareSuccess || isShareError}
           >
             <Share aria-label="Share recording" />
@@ -253,7 +231,7 @@ const Recorder = () => {
         )}
 
         {isShareLoading && (
-          <div className="mr-2 p-2 flex items-center">
+          <div className="p-3 bg-gray-200 flex items-center">
             <svg
               className="animate-spin text-gray-900"
               viewBox="0 0 32 32"
@@ -275,41 +253,47 @@ const Recorder = () => {
           </div>
         )}
 
-        {(isRecorded ||
-          isPlayback ||
-          isShareLoading ||
-          isShareSuccess ||
-          isShareError) && (
+        {!isIdle && !isRecording && (
           <button
             onClick={() => dispatchRecorder({ type: 'SCRAP_RECORDING' })}
-            className="mr-2 p-2 rounded-full hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:text-gray-600 disabled:cursor-default"
+            className="p-3 bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-inset ring-blue-500 focus:outline-none disabled:text-gray-600 disabled:hover:bg-gray-200 disabled:cursor-default"
             disabled={isPlayback || isShareLoading}
           >
             <Cross aria-label="Scrap recording" />
           </button>
         )}
 
-        {(isRecorded || isShareLoading || isShareSuccess || isShareError) && (
-          <button
-            onClick={startPlayback}
-            className="p-2 rounded-full hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:text-gray-600 disabled:cursor-default"
-            disabled={isShareLoading}
-          >
+        <button
+          onClick={() => {
+            if (isIdle) startRecording();
+            if (isRecording) stopRecording();
+            if (isRecorded) startPlayback();
+            if (isPlayback) stopPlayback();
+          }}
+          className="relative p-3 bg-amber-200 hover:bg-amber-200 focus-visible:ring ring-inset ring-blue-500 focus:outline-none disabled:text-gray-600 disabled:hover:bg-gray-200 disabled:cursor-default"
+          disabled={isShareLoading}
+        >
+          {isIdle && <Record aria-label="Start recording" />}
+
+          {isRecording && (
+            <>
+              <Record
+                className="motion-safe:animate-pulse"
+                aria-label="Stop recording"
+              />
+              <div className="p-0.5 rounded-full bg-gray-900 absolute bottom-1 left-1/2 transform -translate-x-1/2" />
+            </>
+          )}
+
+          {(isRecorded || isShareLoading || isShareSuccess || isShareError) && (
             <Play
               aria-label="Play recording"
-              className="transform translate-x-[10%]"
+              className="transform translate-x-[5%]"
             />
-          </button>
-        )}
+          )}
 
-        {isPlayback && (
-          <button
-            onClick={stopPlayback}
-            className="p-2 rounded-full hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
-          >
-            <Stop aria-label="Stop playing recording" />
-          </button>
-        )}
+          {isPlayback && <Stop aria-label="Stop playing recording" />}
+        </button>
       </div>
 
       {isShareSuccess && state.recordingId && (
@@ -339,11 +323,13 @@ interface ShareDialogProps {
 
 const ShareDialog = ({ url, error, onClose }: ShareDialogProps) => {
   const [copied, setCopied] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    if (buttonRef.current !== null) buttonRef.current.focus();
-  }, []);
+    if (inputRef.current !== null && url) inputRef.current.select();
+    if (buttonRef.current !== null && error) buttonRef.current.focus();
+  }, [url, error]);
 
   useEffect(() => {
     function close(e: KeyboardEvent) {
@@ -376,8 +362,8 @@ const ShareDialog = ({ url, error, onClose }: ShareDialogProps) => {
             Share
           </h2>
           <button
-            ref={error ? buttonRef : null}
-            className="p-2 rounded-full hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+            ref={buttonRef}
+            className="p-2 rounded-full hover:bg-gray-200 focus:outline-none focus-visible:ring ring-blue-500"
             onClick={onClose}
           >
             <Cross aria-label="Close" />
@@ -388,14 +374,17 @@ const ShareDialog = ({ url, error, onClose }: ShareDialogProps) => {
           <p className="text-gray-600 mb-6">{error}</p>
         ) : (
           <>
-            <p className="text-gray-900 bg-gray-100 mb-6 rounded-sm p-2 overflow-x-hidden">
-              {url}
-            </p>
+            <input
+              type="text"
+              value={url}
+              readOnly
+              ref={inputRef}
+              className="w-full text-gray-900 bg-gray-100 mb-6 rounded-sm p-2 overflow-x-hidden focus:outline-none"
+            />
             <div className="flex flex-row justify-end">
               <button
-                ref={buttonRef}
                 onClick={copy}
-                className="min-w-[8rem] font-semibold bg-gray-900 text-white py-2 px-8 rounded-sm self-center hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-700 focus:outline-none"
+                className="min-w-[8rem] py-2 px-8 font-semibold bg-gray-900 text-white rounded-sm self-center hover:bg-gray-700 focus:outline-none focus-visible:ring ring-blue-500"
               >
                 {copied ? 'Copied' : 'Copy'}
               </button>

@@ -5,7 +5,7 @@ const MIDI = () => {
   const dispatchNote = useNotesDispatch();
 
   useEffect(() => {
-    function onMessage(message: WebMidi.MIDIMessageEvent) {
+    function onMidiMessage(message: WebMidi.MIDIMessageEvent) {
       if (message.data.length <= 2) return;
 
       const [type, note, velocity] = message.data;
@@ -21,28 +21,28 @@ const MIDI = () => {
       }
     }
 
-    function onStateChange(e: WebMidi.MIDIConnectionEvent) {
-      // eslint-disable-next-line no-console
-      console.log(e); // TODO
+    function onStateChange({ port }: WebMidi.MIDIConnectionEvent) {
+      if (port.type !== 'input' && !('onmidimessage' in port)) return;
+      //@ts-expect-error @types/webmidi seems to be missing types
+      port.onmidimessage = onMidiMessage;
     }
 
-    async function requestMIDI() {
+    async function requestMidiAccess() {
       if (!window.navigator.requestMIDIAccess) return;
 
       try {
-        const access = await window.navigator.requestMIDIAccess();
+        const access = await window.navigator.requestMIDIAccess({ sysex: false }); // prettier-ignore
 
         access.onstatechange = onStateChange;
 
         const inputs = access.inputs.values();
-        for (const input of inputs) input.onmidimessage = onMessage;
+        for (const input of inputs) input.onmidimessage = onMidiMessage;
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log(error);
+        // ...
       }
     }
 
-    requestMIDI();
+    requestMidiAccess();
   }, [dispatchNote]);
 
   return null;
